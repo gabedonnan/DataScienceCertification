@@ -90,9 +90,26 @@ def get_pie_chart(entered_site):
 # Add a callback function for `site-dropdown` and `payload-slider` as inputs, `success-payload-scatter-chart` as output
 @app.callback(Output(component_id='success-payload-scatter-chart', component_property='figure'), [Input(component_id='site-dropdown', component_property='value'), Input(component_id="payload-slider", component_property="value")])
 def get_scatter_chart(entered_site, range_val):
-    filtered = spacex_df[range_val[0] < spacex_df["Payload Mass (kg)"] < range_val[1]].reset_index()
+    filtered = spacex_df[range_val[0] < spacex_df["Payload Mass (kg)"]]
+    filtered = filtered[filtered["Payload Mass (kg)"] < range_val[1]]
     if entered_site == "ALL":
-        fig = px.scatter(filtered, x="Payload Mass (kg)", y="class", color="Booster Version Category")
+        fig = px.scatter(filtered, x="Payload Mass (kg)", y="class", color="Booster Version Category", title="Correlation between booster type and success for all launch pads")
+        return fig
+    elif entered_site == "CCAFS LC-40":
+        filtered = filtered[filtered["Launch Site"] == "CCAFS LC-40"]
+        fig = px.scatter(filtered, x="Payload Mass (kg)", y="class", color="Booster Version Category", title="Correlation between booster type and success for CCAFS LC-40")
+        return fig
+    elif entered_site == "VAFB SLC-4E":
+        filtered = filtered[filtered["Launch Site"] == "VAFB SLC-4E"]
+        fig = px.scatter(filtered, x="Payload Mass (kg)", y="class", color="Booster Version Category", title="Correlation between booster type and success for VAFB SLC-4E")
+        return fig
+    elif entered_site == "KSC LC-39A":
+        filtered = filtered[filtered["Launch Site"] == "KSC LC-39A"]
+        fig = px.scatter(filtered, x="Payload Mass (kg)", y="class", color="Booster Version Category", title="Correlation between booster type and success for KSC LC-39A")
+        return fig
+    elif entered_site == "CCAFS SLC-40":
+        filtered = filtered[filtered["Launch Site"] == "CCAFS SLC-40"]
+        fig = px.scatter(filtered, x="Payload Mass (kg)", y="class", color="Booster Version Category", title="Correlation between booster type and success for CCAFS SLC-40")
         return fig
 
 # Run the app
